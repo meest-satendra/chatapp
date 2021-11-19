@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Axios from 'axios';
 
@@ -10,28 +10,30 @@ const Login = () => {
     }
     const [userData, setUserData] = useState({
         password: '',
-        mobile: ''
-      })
-      const changeHandle = (e) => {
+        mobile: '',
+        loggedIn: false
+    })
+    const changeHandle = (e) => {
         setUserData({ ...userData, [e.target.name]: e.target.value })
-      }
-      const submitData = async (e) => {
+    }
+    const submitData = async (e) => {
         e.preventDefault();
         try {
-          const data = {
-            password: userData.password,
-            mobile: userData.mobile
-          }
-          const res = await Axios.post('/users/login', data)
+            const data = {
+                password: userData.password,
+                mobile: userData.mobile
+            }
+            const res = await Axios.post('/users/login', data)
             console.log(res.data);
             if (res.data) {
                 localStorage.setItem('token', res.data.token)
+                setUserData({ loggedIn: true })
                 navigate('/dashboard')
             }
         } catch (error) {
-          console.log(error);
+            console.log(error);
         }
-      }
+    }
     return (
         <div className="container">
             <div className="row" style={{ paddingTop: '50px' }}>
@@ -46,7 +48,7 @@ const Login = () => {
                                 </div>
                                 <div className="form-group">
                                     <label className="col-form-label" htmlFor="password">Password</label>
-                                    <input type="password" name="password" id="password" placeholder="Enter Password" className="form-control form-control-sm" value={userData.password} onChange={(e) => changeHandle(e)}/>
+                                    <input type="password" name="password" id="password" placeholder="Enter Password" className="form-control form-control-sm" value={userData.password} onChange={(e) => changeHandle(e)} />
                                 </div>
                                 <Link className="nav-link float-right" to="/Register">Dont have an Account?</Link>
                                 <Link className="nav-link float-right" to="/reset">Forget Password ?</Link>

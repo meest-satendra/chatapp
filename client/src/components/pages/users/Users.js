@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
-const ChatHead = ({ io, createChatHead, userId, data }) => {
-    // const [chatHead, setChatHead] = useState([])
-    // io.emit('getChatHead', userId._id);
-    // io.on('returnChatHead', async (data) => {
-    //     setChatHead(data)
-    // })
+const ChatHead = ({ createChatHead, userId, data }) => {
     return (
         <div className='one'>
             <div className='two'>
@@ -14,7 +8,7 @@ const ChatHead = ({ io, createChatHead, userId, data }) => {
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">ChatHead</th>
+                            <th scope="col">UserName</th>
                         </tr>
                     </thead>
                     {data.length ? data.map((user, index) => {
@@ -22,9 +16,7 @@ const ChatHead = ({ io, createChatHead, userId, data }) => {
                             <tbody key={index}>
                                 <tr>
                                     <th scope="row">{index + 1}</th>
-                                    {/* <Link to={{ pathname: `/chat`, query: user }} query={user}> */}
-                                    <td /*onClick={() => createChatHead(user)}*/ >{user.username} {userId._id === user._id ? 'You' : null}</td>
-                                    {/* </Link> */}
+                                    <td onClick={() => createChatHead(user)}>{user.username} {userId._id === user._id ? 'You' : null}</td>
                                 </tr>
                             </tbody>
                         )

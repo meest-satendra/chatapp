@@ -3,6 +3,7 @@ var router = express.Router();
 const users = require('../models/users');
 const jwt = require('jsonwebtoken');
 const { SECREATE_KEY } = require('../config/db');
+const auth = require('../middleware/auth');
 
 router.post('/register', async (req, res) => {
   try {
@@ -31,7 +32,7 @@ router.post('/login', async (req, res) => {
     const user = await users.findOne({ mobile });
     if (!user) {
       res.status(400).json('Invelid details')
-    }else if (user.password == password) {
+    } else if (user.password == password) {
       const payload = {
         user: {
           id: user.id,
@@ -54,6 +55,32 @@ router.post('/login', async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json('Server error')
+  }
+})
+
+/**
+ * @Get user Data 
+ */
+router.get('/user/data', auth, async (req, res) => {
+  try {
+    const user = await users.findById(req.user.id).select('-password');
+    res.status(200).json(user);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json('Server error', error)
+  }
+})
+
+/**
+ * @Get all users 
+ */
+router.get('/users', auth, async (req, res) => {
+  try {
+    const user = await users.find().select('-password');
+    res.status(200).json(user);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json('Server error', error)
   }
 })
 
